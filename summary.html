@@ -51,5 +51,31 @@
   <li>Logging — login timestamps and markup-change history, reviewable by administrators and auditors.</li>
 </ul>
 
+<h2>Can it replace Diagnocat (e.g. in the <code>dm</code> dental marketplace)?</h2>
+
+<p><strong>No — the two systems solve different problems.</strong></p>
+
+<p>The <code>dm</code> backend uses Diagnocat (see <code>backend/internal/services/diagnocat.go</code> and <code>treatment_mapper.go</code>) to:</p>
+<ul>
+  <li>Upload a CBCT (3D DICOM) study and run <strong>multi-pathology detection</strong> — caries, periodontitis, bone loss, peri-apical lesions, missing teeth, implants, etc.</li>
+  <li>Return <strong>structured diagnoses</strong> that are mapped to treatment-catalog items to auto-generate a treatment plan grouped by specialty.</li>
+</ul>
+
+<p>Golden Section does something categorically different:</p>
+<ul>
+  <li><strong>Cephalometric landmark annotation</strong> — it predicts ~30 orthodontic reference points (S, N, A, B, Go, Gn, Me, …) and lets a doctor correct them.</li>
+  <li>Its output is point coordinates, distances, and angles for orthodontic measurement — not pathology findings.</li>
+</ul>
+
+<h3>Gaps that prevent a drop-in replacement</h3>
+<ol>
+  <li><strong>Different clinical domain.</strong> Orthodontic cephalometry ≠ general dental pathology diagnosis. Golden Section does not detect caries, perio, lesions, or any of the findings <code>treatment_mapper.go</code> consumes.</li>
+  <li><strong>No diagnoses / attributes output.</strong> <code>dm</code> depends on a structured list of diagnoses to drive treatment-plan generation. Golden Section's documentation describes control points, not pathology codes.</li>
+  <li><strong>No public API documented.</strong> The Diagnocat integration is a REST client (open-session → upload → close → poll analyses → get diagnoses). The Golden Section docs describe a human-in-the-loop web UI and an internal ML retraining pipeline — no API contract is specified for external consumers.</li>
+  <li><strong>Maturity.</strong> The documents are a technical specification plus role manuals for a staging deployment (<code>gc-stg.codeinside.ru</code>) with an in-progress retraining loop — not an SLA-backed commercial service.</li>
+</ol>
+
+<p>A realistic Diagnocat replacement for <code>dm</code> would need to produce CBCT pathology findings in a mappable schema (e.g., Denti.AI, Pearl Second Opinion, or a self-built detection model) and expose an API.</p>
+
 </body>
 </html>
