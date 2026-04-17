@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Golden Section — System Summary</title>
+<style>
+  body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 2rem; line-height: 1.6; color: #333; }
+  h1 { color: #1a1a1a; border-bottom: 2px solid #e0e0e0; padding-bottom: 0.5rem; }
+  h2 { color: #1a1a1a; margin-top: 2rem; }
+  a { color: #1a73e8; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  ul { padding-left: 1.5rem; }
+  li { margin: 0.4rem 0; }
+  code { background: #f4f4f4; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.95em; }
+  .back { display: inline-block; margin-bottom: 1.5rem; font-size: 0.95rem; }
+  .pipeline { background: #f8f9fa; border-left: 4px solid #1a73e8; padding: 0.8rem 1rem; border-radius: 6px; font-family: 'Consolas', monospace; font-size: 0.95rem; }
+</style>
+</head>
+<body>
+<a href="index.html" class="back">← Back to documentation index</a>
+
+<h1>Golden Section (Золотое сечение) — System Summary</h1>
+
+<p><strong>What it is:</strong> A web-based information system for processing <strong>DICOM medical images</strong> — specifically, automated <strong>cephalometric landmark annotation</strong> on 2D/3D dental/orthodontic X-rays. Developed by CodeInside / ЦИФРАЛЕКТ, deployed at <code>gc-stg.codeinside.ru</code>.</p>
+
+<p><strong>Purpose:</strong> Uses an ML model to predict ~30 anatomical reference points (Or, Po, S, N, A, B, ANS, PNS, Go, Gn, Me, etc.) on skull/jaw X-rays. Experts review and correct the markup; corrected data feeds back into continuous model retraining.</p>
+
+<h2>Users / Roles</h2>
+<ul>
+  <li><strong>Super Administrator</strong> — full user management: create, edit, activate/deactivate, block/unblock, reset passwords, manage roles, view logs.</li>
+  <li><strong>Administrator</strong> — create/edit users, reset passwords, view logs.</li>
+  <li><strong>Doctor (Врач)</strong> — search, view, and edit markup on unconfirmed images; view confirmed images.</li>
+  <li><strong>Auditor (Аудитор)</strong> — edit markup on both confirmed and unconfirmed images; view action logs.</li>
+  <li><strong>User</strong> — baseline role; view and edit own profile.</li>
+</ul>
+
+<h2>Main Capabilities</h2>
+<ul>
+  <li>Authentication with account lockout after 6 failed login attempts.</li>
+  <li>Personal cabinet with profile (login, full name, phone, city, photo) and password change.</li>
+  <li>User administration — registration, role management, status &amp; password management, activity log.</li>
+  <li>DICOM data ingestion — automatic import from medical storage or manual upload from a local directory.</li>
+  <li>ML-driven predictive markup of cephalometric control points, lines, and angles on 2D/3D DICOM images.</li>
+  <li>Image workflow with versioning and a status pipeline:
+    <div class="pipeline">Исходный → В обработке ML → Обработан → Нормализован → Изменен → Подтвержден → Готов к дообучению → Отправлен на дообучение</div>
+  </li>
+  <li>Expert markup editing — add, move, and correct control points; view in anatomical projections; normalize markup.</li>
+  <li>Confirmation workflow — save expert-verified versions and export back to DICOM storage.</li>
+  <li>Continuous ML retraining pipeline: raw → ML prediction → expert → verified → training data → retrained model, with training metrics.</li>
+  <li>Logging — login timestamps and markup-change history, reviewable by administrators and auditors.</li>
+</ul>
+
+</body>
+</html>
